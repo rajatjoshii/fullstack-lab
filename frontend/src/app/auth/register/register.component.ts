@@ -11,7 +11,7 @@ export class RegisterComponent {
   error?: string;
   loading = false;
 
-  form = this.fb.group({
+  form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]]
@@ -23,7 +23,7 @@ export class RegisterComponent {
     if (this.form.invalid) return;
     this.error = undefined;
     this.loading = true;
-    this.auth.register(this.form.value).subscribe({
+    this.auth.register(this.form.getRawValue()).subscribe({
       next: () => (this.loading = false),
       error: (err: AuthError) => {
         this.loading = false;

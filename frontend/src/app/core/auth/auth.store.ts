@@ -30,6 +30,10 @@ export class AuthStore {
     this.userSubject.next(user);
   }
 
+  get user(): UserMe | null {
+    return this.userSubject.value;
+  }
+
   clear() {
     this.tokenSubject.next(null);
     this.userSubject.next(null);

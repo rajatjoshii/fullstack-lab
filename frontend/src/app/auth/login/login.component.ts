@@ -11,7 +11,7 @@ export class LoginComponent {
   error?: string;
   loading = false;
 
-  form = this.fb.group({
+  form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
@@ -22,7 +22,7 @@ export class LoginComponent {
     if (this.form.invalid) return;
     this.error = undefined;
     this.loading = true;
-    this.auth.login(this.form.value).subscribe({
+    this.auth.login(this.form.getRawValue()).subscribe({
       next: () => (this.loading = false),
       error: (err: AuthError) => {
         this.loading = false;
