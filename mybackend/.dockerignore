@@ -1,0 +1,23 @@
+# Build output
+target/
+
+# Maven wrapper
+.mvn/
+.mvnw*
+
+# IDE config
+.idea/
+*.iml
+*.classpath
+*.project
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log

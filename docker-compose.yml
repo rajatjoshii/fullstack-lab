@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./mybackend
+    ports:
+      - "8080:8080"
+
+  # PROD (served by nginx). Expose on 8081 externally so it doesn't collide with dev.
+  frontend-prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80" # open http://localhost:8081
+    depends_on: # starts the backend before frontend
+      - backend 
+
+  # DEV (Angular ng serve with hot reload)
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    # Use a different host port to avoid collisions with frontend-prod
+    ports:
+      - "4200:4200"  # open http://localhost:4200
+    volumes:
+      - ./frontend:/app
+      - node_modules:/app/node_modules
+    environment:
+      # Redundant with Dockerfile.dev ENV, but keeps intent visible here too
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+    depends_on:
+      - backend
+
+volumes:
+  node_modules: {}
