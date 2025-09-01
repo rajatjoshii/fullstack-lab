@@ -1,5 +1,6 @@
 package com.example.mybackend.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -12,6 +13,7 @@ public class CreateUserRequestDTO {
     private String password;
 
     @NotBlank
+    @Email(message = "Invalid email format")
     private String email;
 
     public CreateUserRequestDTO() {}
