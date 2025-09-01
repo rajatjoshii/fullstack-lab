@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import com.example.mybackend.exception.ApiErrorResponse;
@@ -40,4 +41,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        ApiErrorResponse errorResponse=  new ApiErrorResponse(
+        LocalDateTime.now(), 
+        HttpStatus.BAD_REQUEST.value(), 
+        "Illegal Argument Exception", 
+        Map.of("message", ex.getMessage()));
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
 }

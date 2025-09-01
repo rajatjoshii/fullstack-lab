@@ -2,6 +2,8 @@ package com.example.mybackend.controller;
 
 import com.example.mybackend.dto.CreateUserRequestDTO;
 import com.example.mybackend.dto.UserResponseDTO;
+import com.example.mybackend.model.User;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.mybackend.service.UserService;
@@ -57,5 +59,18 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable int id){
         this.userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/test/user")
+    public ResponseEntity<UserResponseDTO> getTestUser(){
+        User user = this.userService.createSampleUser();
+        return ResponseEntity.ok(new UserResponseDTO(user.getId(), user.getName(), user.getEmail()));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody CreateUserRequestDTO request){
+        UserResponseDTO createdUser = this.userService.registerUser(request);
+        URI location = URI.create("/api/users/" + createdUser.getId());
+        return ResponseEntity.created(location).body(createdUser);
     }
 }
