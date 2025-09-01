@@ -1,7 +1,9 @@
 package com.example.mybackend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,17 +15,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
     private int id;
+
     private String name;
+
     private String password;
+
+    @Column(unique = true) //keeping this in the Entity since this is not for validation but persistent value for database
+    private String email;
 
     // Default constructor (JPA needs this)
     public User() {}
 
     //public User(int id, String name){}
 
-    public User(int id, String name){
+    public User(int id, String name, String email){
 		this.id = id;
 		this.name = name;
+        this.email = email;
     } 
 
     public void setId(int id){
@@ -38,6 +46,10 @@ public class User {
         this.name = name;
     }
 
+    public void setEmail(String email){
+        this.email = email;
+    }
+
     public int getId(){
         return id;
     }
@@ -48,5 +60,9 @@ public class User {
 
     public String getPassword(){
         return password;
+    }
+
+    public String getEmail(){
+        return email;
     }
 }

@@ -8,12 +8,18 @@ public class CreateUserRequestDTO {
     @Size(min=2, max=50, message="Name must have 2-50 characters")
     private String name;
 
+    @NotBlank
     private String password;
+
+    @NotBlank
+    private String email;
+
     public CreateUserRequestDTO() {}
 
-    public CreateUserRequestDTO(String name, String password){
+    public CreateUserRequestDTO(String name, String password, String email){
         this.name = name;
         this.password = password;
+        this.email = email;
     }
 
     public void setName(String name){
@@ -29,6 +35,14 @@ public class CreateUserRequestDTO {
     }
 
     public String getPassword(){
-        return this.password;
+        return password;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public String getEmail(){
+        return email;
     }
 }

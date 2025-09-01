@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService, AuthError } from '../../core/auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   error?: string;
   loading = false;
 
@@ -16,8 +17,12 @@ export class LoginComponent {
     password: ['', [Validators.required]]
   });
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {}
+  constructor(private fb: FormBuilder, private auth: AuthService, private http: HttpClient) {}
 
+  ngOnInit(): void {
+    this.http.post('api/users',{name:'Rajat', password: '123'}).subscribe((value)=>console.log(value));
+      
+  }
   submit() {
     if (this.form.invalid) return;
     this.error = undefined;
