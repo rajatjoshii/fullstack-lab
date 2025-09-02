@@ -1,21 +1,26 @@
 package com.example.mybackend.controller;
 
 import com.example.mybackend.dto.CreateUserRequestDTO;
+import com.example.mybackend.dto.LoginRequestDTO;
 import com.example.mybackend.dto.UserResponseDTO;
 import com.example.mybackend.model.User;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.mybackend.service.UserService;
 import jakarta.validation.Valid;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "bearerAuth") // for swagger jwt token 
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "Users", description = "User-related operations")
@@ -72,5 +77,18 @@ public class UserController {
         UserResponseDTO createdUser = this.userService.registerUser(request);
         URI location = URI.create("/api/users/" + createdUser.getId());
         return ResponseEntity.created(location).body(createdUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequestDTO request){
+        String token = userService.loginUser(request);
+        return ResponseEntity.ok(Map.of("token", token));
+    }
+
+    @GetMapping("/users/me")
+    public ResponseEntity<UserResponseDTO> getUserDetails(){
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userdetails = userService.getUserDetails(email);
+        return ResponseEntity.ok(new UserResponseDTO(userdetails.getId(), userdetails.getName(), userdetails.getEmail()));
     }
 }
