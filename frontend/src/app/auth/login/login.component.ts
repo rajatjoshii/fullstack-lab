@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent {
   error?: string;
   loading = false;
 
@@ -19,10 +19,6 @@ export class LoginComponent implements OnInit{
 
   constructor(private fb: FormBuilder, private auth: AuthService, private http: HttpClient) {}
 
-  ngOnInit(): void {
-    this.http.post('api/users',{name:'Rajat', password: '123'}).subscribe((value)=>console.log(value));
-      
-  }
   submit() {
     if (this.form.invalid) return;
     this.error = undefined;

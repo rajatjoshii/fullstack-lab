@@ -1,7 +1,6 @@
 package com.example.mybackend.controller;
 
 import com.example.mybackend.dto.CreateUserRequestDTO;
-import com.example.mybackend.dto.LoginRequestDTO;
 import com.example.mybackend.dto.UserResponseDTO;
 import com.example.mybackend.model.User;
 
@@ -12,7 +11,6 @@ import com.example.mybackend.service.UserService;
 import jakarta.validation.Valid;
 
 import java.net.URI;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,20 +70,7 @@ public class UserController {
         return ResponseEntity.ok(new UserResponseDTO(user.getId(), user.getName(), user.getEmail()));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody CreateUserRequestDTO request){
-        UserResponseDTO createdUser = this.userService.registerUser(request);
-        URI location = URI.create("/api/users/" + createdUser.getId());
-        return ResponseEntity.created(location).body(createdUser);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequestDTO request){
-        String token = userService.loginUser(request);
-        return ResponseEntity.ok(Map.of("token", token));
-    }
-
-    @GetMapping("/users/me")
+    @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> getUserDetails(){
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User userdetails = userService.getUserDetails(email);
