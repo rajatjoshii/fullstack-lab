@@ -37,8 +37,8 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/swagger-ui.html",
                 "/h2-console/**",
-                "/api/users/login",
-                "api/users/register"
+                "/api/auth/login",
+                "/api/auth/register"
             ).permitAll()
             // you can keep everything open for now while building:
             .anyRequest().authenticated()

@@ -18,16 +18,16 @@ export class AuthService {
   ) {}
 
   register(data: RegisterRequest) {
-    return this.http.post<AuthResponse>('/auth/register', data).pipe(
-      tap(res => this.store.setToken(res.accessToken)),
-      switchMap(() => this.getMe()),
-      tap(() => this.router.navigateByUrl('/home')),
+    return this.http.post<AuthResponse>('api/auth/register', data).pipe(
+      //tap(res => this.store.setToken(res.accessToken)),
+      //switchMap(() => this.getMe()),
+      tap(() => this.router.navigateByUrl('/login')),
       catchError(err => throwError(() => this.mapError(err)))
     );
   }
 
   login(data: LoginRequest) {
-    return this.http.post<AuthResponse>('/auth/login', data).pipe(
+    return this.http.post<AuthResponse>('api/auth/login', data).pipe(
       tap(res => this.store.setToken(res.accessToken)),
       switchMap(() => this.getMe()),
       tap(() => this.router.navigateByUrl('/home')),
@@ -44,7 +44,7 @@ export class AuthService {
 
   logout() {
     this.store.clear();
-    this.router.navigateByUrl('/auth/login');
+    this.router.navigateByUrl('api/auth/login');
   }
 
   private mapError(err: HttpErrorResponse): AuthError {

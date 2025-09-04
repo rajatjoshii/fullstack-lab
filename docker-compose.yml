@@ -5,7 +5,8 @@ services:
     build:
       context: ./mybackend
     ports:
-      - "8080:8080"
+      - "8080:8080" # hostPort:containerPort
+
 
   # PROD (served by nginx). Expose on 8081 externally so it doesn't collide with dev.
   frontend-prod:
@@ -13,7 +14,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "8081:80" # open http://localhost:8081
+      - "8081:80" # open http://localhost:8081, hostPort:containerPort - here nginx runs default at 80 in the container and we open it at 8081 in our host
     depends_on: # starts the backend before frontend
       - backend 
 
