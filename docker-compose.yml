@@ -2,21 +2,34 @@ version: '3.8'
 
 services:
   backend:
-    build:
-      context: ./mybackend
-    ports:
-      - "8080:8080" # hostPort:containerPort
+   # REPLACED build with image — since we now pull from ECR
+    image: 017820664528.dkr.ecr.ap-south-1.amazonaws.com/backend:latest
+
+    # ❌ REMOVED port mapping for backend — Nginx will access it internally
+    # ports:
+    #   - "8080:8080" # Exposed only in dev; NOT needed in prod. This line can be uncommented if
+    #  we want to run backend with frontend-dev in local docker compose since in frontend-dev we are running ng s not nginx reverse proxy that uses
+    # docker interned network to communicate. Best way to run is run backend and frontend-dev separately in local not on docker.
+
+    networks:
+      - app-network
 
 
-  # PROD (served by nginx). Expose on 8081 externally so it doesn't collide with dev.
+ # PROD (served by nginx). Expose on 80 for real-world access
   frontend-prod:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    # REPLACED build with image — since we now pull from ECR
+    image: 017820664528.dkr.ecr.ap-south-1.amazonaws.com/frontend-prod:latest
+
+    # Keep port 80 open — this is the only public-facing service
     ports:
-      - "8081:80" # open http://localhost:8081, hostPort:containerPort - here nginx runs default at 80 in the container and we open it at 8081 in our host
-    depends_on: # starts the backend before frontend
-      - backend 
+      - "80:80" # Nginx runs inside container on 80, exposed to EC2 public 80
+
+    depends_on:
+      - backend
+
+    networks:
+      - app-network
+
 
   # DEV (Angular ng serve with hot reload)
   frontend-dev:
@@ -38,3 +51,7 @@ services:
 
 volumes:
   node_modules: {}
+
+networks:
+  app-network:
+    driver: bridge
