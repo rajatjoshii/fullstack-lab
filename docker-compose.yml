@@ -3,7 +3,7 @@ version: '3.8'
 services:
   backend:
    # REPLACED build with image — since we now pull from ECR
-    image: 017820664528.dkr.ecr.ap-south-1.amazonaws.com/backend:latest
+    image: 017820664528.dkr.ecr.us-east-1.amazonaws.com/backend:latest
 
     # ❌ REMOVED port mapping for backend — Nginx will access it internally
     # ports:
@@ -18,7 +18,7 @@ services:
  # PROD (served by nginx). Expose on 80 for real-world access
   frontend-prod:
     # REPLACED build with image — since we now pull from ECR
-    image: 017820664528.dkr.ecr.ap-south-1.amazonaws.com/frontend-prod:latest
+    image: 017820664528.dkr.ecr.us-east-1.amazonaws.com/frontend-prod:latest
 
     # Keep port 80 open — this is the only public-facing service
     ports:
