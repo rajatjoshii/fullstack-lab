@@ -33,5 +33,5 @@ jobs:
 
     - name: Build and Push Frontend Image
       run: |
-        cd ../frontend
+        cd frontend
         docker buildx build --platform linux/amd64 -t 017820664528.dkr.ecr.us-east-1.amazonaws.com/frontend-prod:latest --push .
