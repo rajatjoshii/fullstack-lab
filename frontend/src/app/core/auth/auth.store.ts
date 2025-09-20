@@ -7,9 +7,12 @@ export class AuthStore {
   private tokenSubject = new BehaviorSubject<string | null>(null);
   readonly token$ = this.tokenSubject.asObservable();
 
-  private userSubject = new BehaviorSubject<UserMe | null>(null);
-  readonly user$ = this.userSubject.asObservable();
+  //here we use dual access pattern returning value as an Observable and as .value non reactive
 
+  private userSubject = new BehaviorSubject<UserMe | null>(null);
+  readonly user$ = this.userSubject.asObservable(); // this is reactive mostly used in components 
+
+  //in the constructor we again need to set the tokenSubject with the token during refresh which reinitialises the store 
   constructor() {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -18,7 +21,7 @@ export class AuthStore {
   }
 
   get token(): string | null {
-    return this.tokenSubject.value;
+    return this.tokenSubject.value; // this is not reactive but works well for interceptors or routing - no need to subscribe
   }
 
   setToken(token: string) {

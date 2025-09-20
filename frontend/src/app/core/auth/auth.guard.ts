@@ -8,6 +8,8 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean {
     let token = this.store.token;
+    // line 12-18 are a fallback for page refresh where token in store are lost. Although auth store constructor reintialises them but angular does not ensure
+    // that the store will run before the authguard. Also services are lazy and if not called during any component intialisation tree shaking will ignore them
     if (!token) {
       const stored = sessionStorage.getItem('token');
       if (stored) {
