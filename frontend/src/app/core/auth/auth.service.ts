@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, switchMap, tap, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 import { AuthResponse, LoginRequest, RegisterRequest, UserMe } from '../../models';
 import { AuthStore } from './auth.store';
 
@@ -19,8 +19,6 @@ export class AuthService {
 
   register(data: RegisterRequest) {
     return this.http.post<AuthResponse>('api/auth/register', data).pipe(
-      //tap(res => this.store.setToken(res.accessToken)),
-      //switchMap(() => this.getMe()),
       tap(() => this.router.navigateByUrl('/login')),
       catchError(err => throwError(() => this.mapError(err)))
     );
@@ -44,7 +42,7 @@ export class AuthService {
 
   logout() {
     this.store.clear();
-    this.router.navigateByUrl('api/auth/login');
+    this.router.navigateByUrl('/login'); // it was working before using wild card route
   }
 
   private mapError(err: HttpErrorResponse): AuthError {
